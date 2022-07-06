@@ -166,7 +166,7 @@ The following modules are available in the `dist` directory:
 
 | Name               | Type                       |
 | ------------------ | -------------------------- |
-| `index.js`         | [CJS] module, not minified |
+| `index.cjs`        | [CJS] module, not minified |
 | `index.mjs`        | [ESM] module, not minified |
 | `index.min.mjs`    | [ESM] module, minified     |
 | `index.umd.js`     | [UMD] module, not minified |

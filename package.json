@@ -26,7 +26,7 @@
     "node": ">=8.3"
   },
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "browser": "dist/index.umd.min.js",
   "types": "src/index.d.ts",
