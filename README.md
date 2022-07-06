@@ -37,7 +37,7 @@ Exported methods:
     walkAtOffset(node, offset, visitor, fallback, state)
     walkAtPosition(node, line, column, visitor, fallback, state)
     walkInRange(node, start, end, visitor, fallback, state)
-    walkBetweekLines(node, first, last, visitor, fallback, state)
+    walkBetweenLines(node, first, last, visitor, fallback, state)
 
 Arguments:
 
@@ -59,8 +59,77 @@ Visiting handler:
 * `state` - custom value passed to the walking method (optional)
 * `node` - parent of the currently visited [AST] node
 
-If the handler retuns `false` children of the current node will not be visited.
 If an object with `enter` and/or `exit` methods is used as a visiting handler, `enter` will be caled before visiting children and `exit` after visiting children of the current node.
+
+If a handler retuns `false` children of the current node will not be visited.
+
+Walking can be interrupted by throwing an error and ignoring the thrown type in error handling.
+
+## Examples
+
+Collect only identifiers used in the outer scope:
+
+```js
+import { parse } from 'meriyah'
+import { walk } from 'estree-walkie'
+
+const program = parse('...', { module: true, next: true })
+const identifiers = []
+
+const avoid = () => false
+walk(program, {
+  FunctionDeclaration: avoid,
+  ClassDeclaration: avoid,
+  CallExpression: avoid,
+  FunctionExpression: avoid,
+  ArrowFunctionExpression: avoid,
+  Identifier(node) {
+    identifiers.push(node.name)
+  }
+})
+```
+
+Collect variables declared at all scopes and assign `node.parent` to all nodes:
+
+```js
+import { parse } from 'meriyah'
+import { walk } from 'estree-walkie'
+
+const program = parse('...', { module: true, next: true, loc: true })
+const variables = []
+
+const assignParent = (node, parent) => node.parent = parent
+walk(astRoot, line, column, {
+  VariableDeclarator(node, state, parent) {
+    if (node.type !== 'Identifier') {
+      throw new Error(`unsupported declarator at ${node.loc.start.line}:${node.loc.start.column + 1}`)
+    }
+    state.push(node.name)
+    assignParent(node, parent)
+  }
+}, (node, _state, parent) => assignParent(node, parent), variables)
+```
+
+Check if there is an identifier at a specific position and remember its parent:
+
+```js
+import { parse } from 'meriyah'
+import { walk } from 'estree-walkie'
+
+const program = parse('...', { module: true, next: true, loc: true })
+let identified
+
+try {
+  walkAtLocation(astRoot, line, column, {
+    Identifier(node, _state, parent) {
+      identified = parent
+      throw 0
+    }
+  });
+} catch (err) {
+  if (typeof err !== 'number') throw err
+}
+```
 
 ## Node.js usage
 
@@ -75,14 +144,14 @@ yarn add estree-walkie
 Either import methods from the [API] using the [CJS] module:
 
 ```js
-const { walk, walkAtOffset, walkAtPosition, walkInRange, walkBetweekLines } = require('estree-walkie')
+const { walk, walkAtOffset, walkAtPosition, walkInRange, walkBetweenLines } = require('estree-walkie')
 ...
 ```
 
 Or import methods from the [API] using the [ESM] module:
 
 ```js
-import { walk, walkAtOffset, walkAtPosition, walkInRange, walkBetweekLines } from 'estree-walkie'
+import { walk, walkAtOffset, walkAtPosition, walkInRange, walkBetweenLines } from 'estree-walkie'
 ...
 ```
 
@@ -107,7 +176,7 @@ Either import methods from the [API] using the [ESM] module:
 
 ```html
 <script type=module>
-  import { walk, walkAtOffset, walkAtPosition, walkInRange, walkBetweekLines }
+  import { walk, walkAtOffset, walkAtPosition, walkInRange, walkBetweenLines }
     from 'https://unpkg.com/estree-walkie@0.0.1/dist/index.min.mjs'
   ...
 </script>
@@ -119,7 +188,7 @@ Or import methods from the [API] using the [UMD] module, which will set a global
 <script src=https://unpkg.com/estree-walkie@0.0.1/dist/index.umd.min.js></script>
 <script>
   (() => {
-    const { walk, walkAtOffset, walkAtPosition, walkInRange, walkBetweekLines } = estreeWalkie
+    const { walk, walkAtOffset, walkAtPosition, walkInRange, walkBetweenLines } = estreeWalkie
     ...
   })()
 </script>
@@ -130,7 +199,7 @@ If an [AMD] module loader is detected, the [UMD] module will return exports es e
 ```html
 <script>
   require(['https://unpkg.com/estree-walkie@0.0.1/dist/index.umd.min.js'],
-    ({ walk, walkAtOffset, walkAtPosition, walkInRange, walkBetweekLines }) => {
+    ({ walk, walkAtOffset, walkAtPosition, walkInRange, walkBetweenLines }) => {
       ...
     })
 </script>
