@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "scripts": {
+    "prepare": "node make",
+    "test": "node walk"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@babel/parser": "7.18.6",
+    "@babel/traverse": "7.18.6",
+    "acorn": "8.7.1",
+    "acorn-walk": "8.2.0",
+    "ast-types": "0.14.2",
+    "astray": "^1.1.1",
+    "benchmark": "2.1.4",
+    "d3": "7.6.1",
+    "estree-visitor": "^1.0.8",
+    "estree-walk": "^2.2.0",
+    "estree-walker": "3.0.1",
+    "estree-walkie": "file:.."
+  }
+}

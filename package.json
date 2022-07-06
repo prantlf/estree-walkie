@@ -1,0 +1,99 @@
+{
+  "name": "estree-walkie",
+  "description": "Walks a JavaScript AST compatible with ESTree.",
+  "version": "0.0.1",
+  "homepage": "https://github.com/prantlf/estree-walkie#readme",
+  "author": {
+    "name": "Ferdinand Prantl",
+    "email": "prantlf@gmail.com",
+    "url": "http://prantl.tk"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prantlf/estree-walkie.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prantlf/estree-walkie/issues"
+  },
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/prantlf/estree-walkie/blob/master/LICENSE"
+    }
+  ],
+  "engines": {
+    "node": ">=8.3"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "browser": "dist/index.umd.min.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    "require": "./dist/index.cjs",
+    "import": "./dist/index.mjs"
+  },
+  "files": [
+    "dist",
+    "src/index.d.ts"
+  ],
+  "scripts": {
+    "prepare": "rollup -c",
+    "lint": "denolint",
+    "check": "teru-esm test/*.js",
+    "cover": "c8 teru-esm test/*.js",
+    "test": "denolint && c8 teru-esm test/*.js"
+  },
+  "c8": {
+    "check-coverage": true,
+    "reporter": [
+      "text",
+      "lcov"
+    ],
+    "branches": 100,
+    "lines": 100,
+    "functions": 100,
+    "statements": 100
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      [
+        "@semantic-release/github",
+        {
+          "failComment": false
+        }
+      ],
+      "@semantic-release/git"
+    ]
+  },
+  "devDependencies": {
+    "@node-rs/deno-lint": "^1.13.1",
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "c8": "^7.11.3",
+    "estree-walkie": "file:.",
+    "meriyah": "4.2.1",
+    "rollup": "^2.75.6",
+    "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-swc-minify": "^1.0.3",
+    "tehanu": "^1.0.1",
+    "tehanu-repo-coco": "^1.0.0",
+    "tehanu-teru": "^1.0.0"
+  },
+  "keywords": [
+    "ast",
+    "estree",
+    "estree-walker",
+    "estree-visitor",
+    "traverse",
+    "visitor",
+    "visit",
+    "walker",
+    "walk"
+  ]
+}
