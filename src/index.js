@@ -1,8 +1,7 @@
 function walkInner(node, test, visitor, fallback, state, parent) {
-  const { type } = node
-  if (!type || test && !test(node)) return
+  if (test && !test(node)) return
 
-  const visit = visitor[type] || fallback
+  const visit = visitor[node.type] || fallback
   if (visit) {
     if (typeof visit === 'function') {
       if (visit(node, state, parent) === false) return false
@@ -20,7 +19,7 @@ function walkInner(node, test, visitor, fallback, state, parent) {
             walkInner(item, test, visitor, fallback, state, node)
           }
         }
-      } else {
+      } else if (child.type && child !== parent) {
         walkInner(child, test, visitor, fallback, state, node)
       }
     }
@@ -54,7 +53,8 @@ export function walkAtPosition(node, line, column, visitor, fallback, state) {
     const { loc } = node
     const { start, end } = loc
     return start.line <= line && end.line >= line &&
-      (start.line !== line || start.column <= column && end.column > column)
+      (start.line !== line || end.line !== line ||
+       start.column <= column && end.column > column)
   }
   return walkInner(node, test, visitor, fallback, state)
 }
