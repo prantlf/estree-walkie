@@ -1,7 +1,7 @@
 {
   "name": "estree-walkie",
   "description": "Walks a JavaScript AST compatible with ESTree.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/prantlf/estree-walkie#readme",
   "author": {
     "name": "Ferdinand Prantl",

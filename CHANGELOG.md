@@ -1,3 +1,10 @@
+## [0.0.4](https://github.com/prantlf/estree-walkie/compare/v0.0.3...v0.0.4) (2022-07-08)
+
+
+### Bug Fixes
+
+* Ignore keys pointing to parent node, fix walkAtPosition ([1debacf](https://github.com/prantlf/estree-walkie/commit/1debacf5eeed99d42a8b376bb2998514876fb53f))
+
 ## [0.0.3](https://github.com/prantlf/estree-walkie/compare/v0.0.2...v0.0.3) (2022-07-06)
 
 
