@@ -8,7 +8,7 @@
 Walks a JavaScript [AST] compatible with [ESTree].
 
 * [ESM], [CJS] and [UMD] modules offering an [API] for programmatic usage in [Node.js], [Deno] and web browser.
-* Ignores keys pointing to the parent node. (Often cause of stack overflows.)
+* Ignores keys in AST nodes pointing to parent nodes. (Often needed and would cause a stack overflow.)
 * Includes TypeScript types.
 * No dependencies.
 * Tiny size - 926 B minified, 435 B gzipped, 390 B brotlied.
